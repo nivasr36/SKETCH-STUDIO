@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SketchColor Studio</string>
+    <!-- Google official AdMob test app ID. Replace with your own production App ID before release. -->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <!-- Google official AdMob test banner ID. Replace with your production banner unit ID before release. -->
+    <string name="admob_banner_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+</resources>

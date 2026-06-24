@@ -1,0 +1,16 @@
+services:
+  backend:
+    image: node:22
+    working_dir: /app
+    command: sh -c "npm install && npm start"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend-server:/app
+      - ./admin-web:/admin-web
+    environment:
+      PORT: 8080
+      JWT_SECRET: change_this_in_production
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_PASSWORD: admin12345
+      DATABASE_PATH: /app/sketchcolor.sqlite

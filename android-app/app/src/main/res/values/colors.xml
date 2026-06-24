@@ -1,0 +1,8 @@
+<resources>
+    <color name="brand_dark">#152230</color>
+    <color name="brand_pink">#FCD9D4</color>
+    <color name="brand_grey">#CBCCC6</color>
+    <color name="brand_orange">#FF8A00</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

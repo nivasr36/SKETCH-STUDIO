@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SketchColor Admin</title>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#152230; color:#fff; }
+    header { padding:22px; background:#0d1620; border-bottom:3px solid #ff8a00; }
+    main { max-width:1100px; margin:0 auto; padding:24px; }
+    .card { background:#1d3043; border:1px solid #cbccc6; border-radius:16px; padding:20px; margin:14px 0; }
+    input, button { padding:12px; border-radius:8px; border:0; margin:6px; }
+    button { background:#ff8a00; color:#111; font-weight:bold; cursor:pointer; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; }
+    .metric { background:#fcd9d4; color:#152230; padding:20px; border-radius:14px; font-size:20px; font-weight:bold; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:10px; border-bottom:1px solid #cbccc6; text-align:left; }
+  </style>
+</head>
+<body>
+  <header><h1>SketchColor Studio Admin Panel</h1></header>
+  <main>
+    <section class="card">
+      <h2>Admin Login</h2>
+      <input id="email" type="email" placeholder="Admin email" value="admin@example.com" />
+      <input id="password" type="password" placeholder="Password" value="admin12345" />
+      <button onclick="login()">Login</button>
+      <button onclick="loadStats()">Refresh Stats</button>
+      <p id="status"></p>
+    </section>
+
+    <section class="grid">
+      <div class="metric">Users: <span id="users">0</span></div>
+      <div class="metric">Artworks: <span id="artworks">0</span></div>
+      <div class="metric">Events: <span id="events">0</span></div>
+      <div class="metric">Payments: <span id="payments">0</span></div>
+    </section>
+
+    <section class="card">
+      <h2>Latest Users</h2>
+      <table>
+        <thead><tr><th>ID</th><th>Email</th><th>Role</th><th>Created</th></tr></thead>
+        <tbody id="latestUsers"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    let token = localStorage.getItem('adminToken') || '';
+
+    async function login() {
+      const res = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.value, password: password.value })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        status.textContent = data.error || 'Login failed';
+        return;
+      }
+      token = data.token;
+      localStorage.setItem('adminToken', token);
+      status.textContent = 'Logged in';
+      loadStats();
+    }
+
+    async function loadStats() {
+      const res = await fetch('/admin/stats', { headers: { Authorization: `Bearer ${token}` } });
+      const data = await res.json();
+      if (!res.ok) {
+        status.textContent = data.error || 'Could not load stats';
+        return;
+      }
+      users.textContent = data.users;
+      artworks.textContent = data.artworks;
+      events.textContent = data.events;
+      payments.textContent = data.payments;
+      latestUsers.innerHTML = data.latestUsers.map(u => `<tr><td>${u.id}</td><td>${u.email}</td><td>${u.role}</td><td>${new Date(u.createdAt).toLocaleString()}</td></tr>`).join('');
+      status.textContent = 'Stats updated';
+    }
+  </script>
+</body>
+</html>

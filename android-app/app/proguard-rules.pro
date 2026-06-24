@@ -1,0 +1,3 @@
+-keep class com.google.android.gms.ads.** { *; }
+-keep class com.android.billingclient.api.** { *; }
+-keep class org.json.** { *; }
