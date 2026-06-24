@@ -81,9 +81,10 @@ class MainActivity : AppCompatActivity() {
         }
         root.addView(drawingView, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
 
-        val tools = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(8, 6, 8, 6)
+val tools = LinearLayout(this).apply {
+    orientation = LinearLayout.VERTICAL
+    setPadding(12, 10, 12, 12)
+    setBackgroundColor(Color.rgb(32, 45, 58))
         }
         root.addView(tools, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
 
@@ -122,18 +123,40 @@ class MainActivity : AppCompatActivity() {
         addButton(row2, "Login") { showLoginDialog() }
         addButton(row2, "Premium") { billing.openPremiumScreen(this) }
 
-        val palette = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER
-        }
-        tools.addView(palette)
-        addColorButton(palette, Color.BLACK, "Black")
-        addColorButton(palette, Color.RED, "Red")
-        addColorButton(palette, Color.BLUE, "Blue")
-        addColorButton(palette, Color.GREEN, "Green")
-        addColorButton(palette, Color.rgb(255, 138, 0), "Orange")
-        addColorButton(palette, Color.rgb(252, 217, 212), "Pink")
-        addColorButton(palette, Color.rgb(125, 75, 25), "Brown")
+        val paletteLabel = TextView(this).apply {
+    text = "Color Palette"
+    setTextColor(Color.WHITE)
+    textSize = 15f
+    gravity = Gravity.CENTER
+    setPadding(0, 12, 0, 6)
+}
+tools.addView(paletteLabel)
+
+val paletteRow1 = LinearLayout(this).apply {
+    orientation = LinearLayout.HORIZONTAL
+    gravity = Gravity.CENTER
+}
+tools.addView(paletteRow1)
+
+val paletteRow2 = LinearLayout(this).apply {
+    orientation = LinearLayout.HORIZONTAL
+    gravity = Gravity.CENTER
+}
+tools.addView(paletteRow2)
+
+addColorButton(paletteRow1, Color.BLACK, "Black")
+addColorButton(paletteRow1, Color.RED, "Red")
+addColorButton(paletteRow1, Color.rgb(255, 138, 0), "Orange")
+addColorButton(paletteRow1, Color.YELLOW, "Yellow")
+addColorButton(paletteRow1, Color.GREEN, "Green")
+addColorButton(paletteRow1, Color.BLUE, "Blue")
+
+addColorButton(paletteRow2, Color.rgb(252, 217, 212), "Pink")
+addColorButton(paletteRow2, Color.MAGENTA, "Magenta")
+addColorButton(paletteRow2, Color.CYAN, "Cyan")
+addColorButton(paletteRow2, Color.rgb(0, 150, 136), "Teal")
+addColorButton(paletteRow2, Color.rgb(125, 75, 25), "Brown")
+addColorButton(paletteRow2, Color.DKGRAY, "Gray")
 
         val sizeLabel = TextView(this).apply {
             text = "Brush size: 14"
@@ -166,29 +189,38 @@ class MainActivity : AppCompatActivity() {
         setContentView(root)
     }
 
-    private fun addButton(parent: LinearLayout, text: String, action: () -> Unit) {
-        val button = MaterialButton(this).apply {
-            this.text = text
-            textSize = 11f
-            minWidth = 0
-            minimumWidth = 0
-            setPadding(8, 0, 8, 0)
-            setOnClickListener { action() }
-        }
-        parent.addView(button, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+  private fun addButton(parent: LinearLayout, text: String, action: () -> Unit) {
+    val button = MaterialButton(this).apply {
+        this.text = text
+        textSize = 12f
+        isAllCaps = false
+        minWidth = 0
+        minimumWidth = 0
+        setTextColor(Color.WHITE)
+        setBackgroundColor(Color.rgb(255, 138, 0))
+        setPadding(10, 6, 10, 6)
+        setOnClickListener { action() }
     }
 
-    private fun addColorButton(parent: LinearLayout, color: Int, label: String) {
-        val button = Button(this).apply {
-            text = " "
-            setBackgroundColor(color)
-            contentDescription = label
-            setOnClickListener {
-                drawingView.currentColor = color
-                toast("$label selected")
-            }
+    val params = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+    params.setMargins(6, 6, 6, 6)
+    parent.addView(button, params)
+    }
+
+   private fun addColorButton(parent: LinearLayout, color: Int, label: String) {
+    val button = Button(this).apply {
+        text = ""
+        setBackgroundColor(color)
+        contentDescription = label
+        setOnClickListener {
+            drawingView.currentColor = color
+            toast("$label selected")
         }
-        parent.addView(button, LinearLayout.LayoutParams(0, 60, 1f))
+    }
+
+    val params = LinearLayout.LayoutParams(0, 80, 1f)
+    params.setMargins(6, 6, 6, 6)
+    parent.addView(button, params)
     }
 
     private fun autosaveDraft() {
